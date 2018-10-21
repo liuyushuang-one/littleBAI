@@ -2,7 +2,7 @@
 * @Author: 小锅
 * @Date:   2018-10-11 20:43:43
 * @Last Modified by:   小锅
-* @Last Modified time: 2018-10-13 10:00:27
+* @Last Modified time: 2018-10-21 23:14:22
 */
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -10,13 +10,14 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 //环境变量配置 dev/online
 var WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
 //封装一个html页面模板   html-webpack-plugin
-var getHtmlConfig = function(name){
+var getHtmlConfig = function(name, title){
 	return{
 		template: './src/view/' + name + '.html',
 		filename: 'view/' + name + '.html',
+		title: title,
 		inject: true,
 		hash: true,
-		chunks: ['common', 'name']
+		chunks: ['common', name]
 	}
 }
 var config = {
@@ -24,12 +25,14 @@ var config = {
 		'common': ['./src/page/common/index.js'],
 		'index': ['./src/page/index/index.js'],
 		'login': ['./src/page/login/index.js'],
+		'result': ['./src/page/result/index.js'],
 	},
 	output: {
 		path: './dist',
 		publicPath: '/dist',
 		filename: 'js/[name].js'
 	},
+	//引入jQuery
 	externals: {
 		'jquery': 'window.jQuery'
 	},
@@ -42,8 +45,22 @@ var config = {
 			{
 				test:/\.(gif|png|jpg|woff|svg|eot|ttf)\??.*$/,
 				loader: 'url-loader?limit=100&name=resource/[name].[ext]'
+			},
+			{
+				test:/\.string$/,
+				loader: 'html-loader'
 			}
 		]
+	},
+	//配置路径
+	resolve: {
+		alias: {
+			node_modules: __dirname + 'node_modules',
+			util : __dirname + '/src/util',
+			page : __dirname + '/src/page',
+			service : __dirname + '/src/service',
+			image : __dirname + '/src/image'
+		}
 	},
 	plugins:[
 	//独立通用模块到js/base.js
@@ -54,8 +71,9 @@ var config = {
 	//把css单独打包到文件里
 		new ExtractTextPlugin('css/[name].css'),
 	//HTML模板
-		new HtmlWebpackPlugin(getHtmlConfig('index')),
-		new HtmlWebpackPlugin(getHtmlConfig('login')),
+		new HtmlWebpackPlugin(getHtmlConfig('index', '首页')),
+		new HtmlWebpackPlugin(getHtmlConfig('login', '用户登录')),
+		new HtmlWebpackPlugin(getHtmlConfig('result', '操作结果')),
 	]
 };
 

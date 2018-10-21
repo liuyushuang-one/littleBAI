@@ -1,0 +1,22 @@
+/*
+* @Author: 小锅
+* @Date:   2018-10-21 15:41:41
+* @Last Modified by:   小锅
+* @Last Modified time: 2018-10-21 15:46:31
+*/
+.footer{
+	padding-bottom: 10px;
+}
+.footer .links{
+	text-align: center;
+	color: #666;
+	line-height: 30px;
+}
+.footer .links .link{
+	padding: 0 10px;
+}
+.footer .copyright{
+	text-align: center;
+	color: #666;
+	line-height: 30px;
+}
